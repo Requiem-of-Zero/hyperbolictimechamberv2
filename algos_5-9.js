@@ -180,25 +180,32 @@ const pairProduct = (numbers, targetProduct) => {
 
 const intersection = (a, b) => {
   // todo
-    let longest, result = new Set(), set;
-    if(b.length > a.length){
-    longest = 'b'
-    set = new Set(b)
-    } else {
-    longest = 'a'
-    set = new Set(a)
-    }
-
-    if(longest === 'a'){
+    let numSet = new Set(a);
+    const res = [];
+    
     for(const val of b){
-        if(set.has(val))
-            result.add(val)
+        if(numSet.has(val))
+        res.push(val)
     }
-    } else {
-    for(const val of a){
-        if(set.has(val))
-        result.add(val)
+    return res
+};
+
+// Five Sort
+
+const fiveSort = (nums) => {
+  // todo
+    let i=0, j = nums.length-1;
+    
+    while(i <= j){
+        if(nums[j] === 5){
+        j--
+        } else if(nums[i] === 5){
+        [nums[i], nums[j]] = [nums[j], nums[i]]
+        i++
+        } else {
+        i++
+        }
     }
-    }
-    return Array.from(result)
+    
+    return nums
 };

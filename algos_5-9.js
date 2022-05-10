@@ -67,3 +67,138 @@ var generateParenthesis = function(n) {
     backtrack(0,0)
     return res
 };
+
+// Private Content
+// uncompresses 3n12e3z
+
+const uncompress = (s) => {
+    let i=0, j=0, res = '', num = '';
+    const alpha = new Set('abcdefghijklmnopqrstuvwxyz');
+
+    while(j < s.length){
+        console.log(i, j)
+        if(!alpha.has(s[j])){
+            num += s[j] 
+        }
+        if(alpha.has(s[j])){
+        for(let k=0; k < +num; k++){
+            res += s[j]
+            }
+        i = j
+        num = ''
+        }
+        j++
+    }
+    return res;
+};
+
+// compresses ccaaaaatttsssss
+
+const compress = (s) => {
+  // todo
+/*
+input:
+    string: ccaaatsss
+
+    variables:
+    res 
+    i
+    j
+    count = j - i
+    */   
+    
+    let i=0, j=0, res = '', count = 0;
+    
+    while(j <= s.length){
+        count = j - i
+        if(s[j] !== s[i] && count !== 1){
+        res += count + s[i]
+        i = j
+        } else if(s[j] !== s[i] && count === 1){
+        res += s[i]
+        i=j
+        }
+        j++
+    }
+    return res
+};
+
+// Most Freq Char
+
+const mostFrequentChar = (s) => {
+  // todo
+    const count = {};
+    let max = 0, maxChar;
+    
+    for(const char of s){
+        count[char] = 1+(count[char] || 0)
+    }
+    
+    for(const [key, val] of Object.entries(count)){
+        if(val > max){
+        max = val;
+        maxChar = key
+        }
+    }
+    
+    return maxChar
+};
+
+// Pair Sum
+
+const pairSum = (numbers, targetSum) => {
+
+    const refHash = {};
+    
+    for(let i=0; i < numbers.length; i++){
+        let num = numbers[i];
+        const diff = targetSum - num
+        if(!(diff in refHash)){
+        refHash[num] = i
+        } else {
+        return [i, refHash[diff]]
+        }
+    }
+};
+
+// Pair Product
+
+const pairProduct = (numbers, targetProduct) => {
+  // todo
+    const hash = {};
+    
+    for(let i=0; i < numbers.length; i++){
+        const num = numbers[i];
+        let complement = targetProduct/num
+        if(complement in hash) return [i, hash[complement]]
+        
+        hash[num] = i
+    }
+};
+
+// Intersection Values of 2 Arrays
+
+const intersection = (a, b) => {
+  // todo
+    let longest, result = new Set(), set;
+    if(b.length > a.length){
+    longest = 'b'
+    set = new Set(b)
+    } else {
+    longest = 'a'
+    set = new Set(a)
+    }
+
+    if(longest === 'a'){
+    for(const val of b){
+        if(set.has(val))
+            result.add(val)
+    }
+    } else {
+    for(const val of a){
+        if(set.has(val))
+        result.add(val)
+    }
+    }
+    return Array.from(result)
+};

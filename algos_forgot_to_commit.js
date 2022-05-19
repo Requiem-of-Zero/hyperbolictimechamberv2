@@ -237,3 +237,284 @@ const addLists = (head1, head2) => {
   return dummyHead.next
 };
 
+// Binary Search Tree
+
+// BFS Values
+
+const depthFirstValues = (root) => {
+  // todo
+  
+  if(!root) return [];
+  
+  const stack = [root], result = [];
+
+  while(stack.length){
+    let curr = stack.pop();
+
+    result.push(curr.val)
+    
+    if(curr.right) stack.push(curr.right)
+    if(curr.left) stack.push(curr.left)
+  }
+  
+  return result;
+};
+
+// DFS Values
+
+const breadthFirstValues = (root) => {
+  // todo
+  if(!root) return [];
+  
+  const queue = [ root ], result = [];
+  
+  while(queue.length){
+    let currNode = queue.pop();
+    
+    result.push(currNode.val);
+    
+    if(currNode.left) queue.unshift(currNode.left)
+    if(currNode.right) queue.unshift(currNode.right)
+  }
+  
+  return result;
+};
+
+// Tree Sum
+
+const treeSum = (root) => {
+  // todo
+  if(!root) return 0;
+  
+  const queue = [root]
+  let result = 0;
+  
+  while(queue.length){
+    let currNode = queue.pop();
+    
+    result += currNode.val
+    
+    if(currNode.left) queue.unshift(currNode.left);
+    if(currNode.right) queue.unshift(currNode.right);
+  }
+  
+  return result;
+};
+
+// Tree Includes
+
+const treeIncludes = (root, target) => {
+  // todo
+  if(!root) return false;
+  
+  const stack = [root];
+  
+  while(stack.length){
+    let curr = stack.pop();
+    
+    if(curr.val === target) return true;
+    
+    if(curr.left) stack.push(curr.left);
+    if(curr.right) stack.push(curr.right);
+  }
+  
+  return false;
+};
+
+// Tree Min Val
+
+const treeMinValue = (root) => {
+  // todo
+  const stack = [ root ];
+  
+  let min = Infinity;
+  
+  while(stack.length){
+    let curr = stack.pop();
+    
+    min = Math.min(curr.val, min);
+    
+    if(curr.left) stack.push(curr.left);
+    if(curr.right) stack.push(curr.right)
+  }
+  
+  return min;
+};
+
+// Max Path Sum
+
+const maxPathSum = (root) => {
+  // todo
+  if(!root) return -Infinity
+  if(!root.left && !root.right) return root.val
+  const max = Math.max(maxPathSum(root.left),maxPathSum(root.right))
+  return root.val + max
+};
+
+// Path Finder in BST
+
+const pathFinder = (root, target) => {
+  // todo
+  if(!root) return null
+  if(root.val === target) return [target];
+  if(!root.left && !root.right) return null;
+  const left = pathFinder(root.left, target),
+        right = pathFinder(root.right, target);
+  if(left !== null){
+    left.unshift(root.val);
+    return left
+  }
+  if(right !== null){
+    right.unshift(root.val);
+    return right;
+  }
+  return null
+};
+
+// Tree Value Count
+
+const treeValueCount = (root, target) => {
+  // todo
+  if(!root) return 0;
+  
+  let count = 0;
+  const stack = [root];
+  
+  while(stack.length){
+    let curr = stack.pop();
+    
+    if(curr.val === target) count++
+    
+    if(curr.left) stack.push(curr.left)
+    if(curr.right) stack.push(curr.right)
+  }
+  
+  return count;
+};
+
+// BST Depth or Height
+// Recursive
+
+const howHigh = (node) => {
+  // todo
+  if(!node) return -1;
+  const left = howHigh(node.left), 
+        right = howHigh(node.right)
+  return Math.max(left, right) + 1
+};
+
+// Bottom Right Value of BST
+
+const bottomRightValue = (root) => {
+  // todo
+  const queue = [root];
+  let lastEle;
+  
+  while(queue.length){
+    let curr = queue.shift();
+    lastEle = curr.val;
+    if(curr.left) queue.push(curr.left)
+    if(curr.right) queue.push(curr.right)
+  }
+  
+  return lastEle
+};
+
+// All Paths of BST
+
+const allTreePaths = (root) => {
+  // todo
+  if(!root){
+    return [[]]
+  }
+  
+  if(!root.left && !root.right) return [[root.val]]
+  
+  let currVal = root.val
+  
+  let left = allTreePaths(root.left)
+  left = left.filter(path => path.length > 0)
+  
+  for(let i=0; i < left.length; i++){
+    let arr = left[i];
+    arr.unshift(currVal)
+  };
+  
+  let right = allTreePaths(root.right)
+  right = right.filter(path => path.length >= 1)
+  
+  for(let i=0; i < right.length; i++){
+    let arr = right[i];
+    arr.unshift(currVal)
+  };
+  
+  return left.concat(right);
+};
+
+// Tree Levels in BST
+
+const treeLevels = (root) => {
+  // todo
+  if(!root) return []
+  
+  const queue = [root], result = [];
+  
+//   queue.length 1
+//   length 1
+//   queue [root]
+  
+  while(queue.length){
+    let newArr = [], length = queue.length
+    
+    for(let i=0; i < length; i++){
+      let shifted = queue.shift()
+      
+      newArr.push(shifted.val)
+      
+      if(shifted.left) queue.push(shifted.left)
+      if(shifted.right) queue.push(shifted.right)
+      // result.push(newArr)
+    }
+    result.push(newArr)
+  }
+  return result
+  // return result;
+};
+
+// Level Averages
+
+const levelAverages = (root) => {
+  // todo
+  if(!root) return []
+  
+  let result = [];
+  const queue = [root];
+  
+  while(queue.length){
+    let length = queue.length, sum = 0;
+    
+    for(let i=0; i < length; i++){
+      let curr = queue.shift();
+      
+      sum += +curr.val
+      
+      if(curr.left) queue.push(curr.left)
+      if(curr.right) queue.push(curr.right)
+    }
+    result.push(sum/length)
+  }
+  
+  return result;
+};
+
+// Leaf List Recursive
+
+const leafList = (root) => {
+  // todo
+  if(!root) return [];
+  if(!root.left && !root.right) return [root.val];
+  const left = leafList(root.left), 
+        right = leafList(root.right)
+  return left.concat(right)
+};
+

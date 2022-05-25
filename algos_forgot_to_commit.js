@@ -602,5 +602,67 @@ const explore = (graph, curr, visited) => {
   return true;
 }
 
+// Largest Component
 
+const largestComponent = (graph) => {
+  // todo
+  let largest = 0;
+  
+  for(const node in graph){
+    const size = explore(graph, node, new Set());
+    if(size > largest) largest = size
+  }
+  
+  return largest;
+};
+
+const explore = (graph, curr, visited) => {
+  if(visited.has(curr)) return 0;
+  
+  visited.add(curr)
+  
+  let size = 1;
+  
+  for(const neighbor of graph[curr]){
+    size += explore(graph, neighbor, visited)
+  }
+  
+  return size;
+}
+
+// Shortest Path
+
+const shortestPath = (edges, nodeA, nodeB) => {
+  let graph = createAdj(edges), visited = new Set([nodeA, 0]), queue = [[nodeA, 0]];
+  
+  while(queue.length){
+    let [curr, distance] = queue.shift();
+    
+    if(curr === nodeB) return distance;
+    
+    for(let neighbor of graph[curr]){
+      if(!visited.has(neighbor)){
+        visited.add(neighbor)
+        queue.push([neighbor, distance + 1]) //ask why distance++ doesnt work
+      }
+    }
+  }
+  
+  return -1
+};
+
+const createAdj = (edges) => {
+  let graph = {};
+  
+  for(const edge of edges){
+    let [a, b] = edge;
+    
+    if(graph[a] === undefined) graph[a] = [];
+    if(graph[b] === undefined) graph[b] = [];
+    graph[a].push(b);
+    graph[b].push(a);
+  }
+  
+  return graph
+}
 

@@ -518,3 +518,89 @@ const leafList = (root) => {
   return left.concat(right)
 };
 
+// Graph Problems
+
+// Has Path
+
+const hasPath = (graph, src, dst) => {
+  // todo
+  const stack = [ src ], seen = new Set();
+  
+  while(stack.length){
+    let curr = stack.pop();
+    
+    seen.add(curr)
+    
+    for(let neighbor of graph[curr]){
+      stack.push(neighbor)
+    }
+    if(seen.has(dst))
+      return true;
+  }
+  return false;
+};
+
+// Undirected Path
+
+const undirectedPath = (edges, nodeA, nodeB) => {
+  const graph = createAdj(edges);
+  return hasPath(graph, nodeA, nodeB, new Set())
+};
+
+const hasPath = (graph, src, dst, visited) => {
+  if(src === dst) return true;
+  if(visited.has(src)) return false;
+  
+  visited.add(src);
+  
+  for(let neighbor of graph[src]){
+    if(hasPath(graph, neighbor, dst, visited) === true){
+      return true;
+    }
+  }
+  return false;
+}
+
+const createAdj = (edges) => {
+  const hash = {};
+  
+  for(const edge of edges){
+    let [e1, e2] = edge
+    
+    if(!(e1 in hash)) hash[e1] = new Set();
+    if(!(e2 in hash)) hash[e2] = new Set();
+    hash[e1].add(e2);
+    hash[e2].add(e1);
+  }
+  
+  return hash
+}
+
+// Connected Components Count
+
+const connectedComponentsCount = (graph) => {
+  // todo
+  const visited = new Set();
+  let count = 0;
+  
+  for(let node in graph){
+    if(explore(graph, node, visited) === true)
+      count += 1
+  }
+  return count;
+};
+
+const explore = (graph, curr, visited) => {
+  if(visited.has(curr.toString())) return false;
+  
+  visited.add(curr.toString())
+  
+  for(let neighbor of graph[curr]){
+    explore(graph, neighbor, visited)
+  }
+  
+  return true;
+}
+
+
+

@@ -666,3 +666,103 @@ const createAdj = (edges) => {
   return graph
 }
 
+// Minimum size island
+
+const minimumIsland = (grid) => {
+  let visited = new Set(), minimum = Infinity;
+  // todo
+  for(let row = 0; row < grid.length; row++){
+    for(let col = 0; col < grid[0].length; col++){
+      const size = explore(grid, row, col, visited)
+      if(size > 0 && size < minimum)
+        minimum = size
+    }
+  }
+  return minimum
+};
+
+const explore = (grid, row, col, visited) => {
+  const rowInBound = 0 <= row && row < grid.length;
+  const colInBound = 0 <= col && col < grid[0].length;
+  if(!rowInBound || !colInBound) return 0;
+  
+  if(grid[row][col] === 'W') return 0;
+  
+  let pos = row + ',' + col
+  
+  if(visited.has(pos)) return 0;
+  visited.add(pos);
+  
+  let size = 1;
+  
+  size += explore(grid, row + 1, col, visited);
+  size += explore(grid, row - 1, col, visited);
+  size += explore(grid, row, col + 1, visited);
+  size += explore(grid, row, col - 1, visited);
+  
+  return size
+}
+
+// Closest Carrot
+
+const closestCarrot = (grid, startRow, startCol) => {
+  // todo
+  let visited = new Set([startRow + ',' + startCol]), 
+      shortest = Infinity, 
+      queue = [[startRow, startCol, 0]];
+  
+  while(queue.length){
+    let curr = queue.shift(),
+        [currRow, currCol, distance] = curr;
+    
+    if(grid[currRow][currCol] === 'C') return distance
+      
+    const moves = [[1,0], [-1,0], [0,1], [0,-1]];
+    
+    for(const move of moves){
+      let [rowChange, colChange] = move;
+      let rowMove = currRow + rowChange;
+      let colMove = currCol + colChange;
+      let pos = rowMove + ',' + colMove;
+      let rowInbound = 0 <= rowMove && rowMove < grid.length;
+      let colInbound = 0 <= colMove && colMove < grid[0].length;
+      if(rowInbound && colInbound && grid[rowMove][colMove] !== 'X' && !visited.has(pos)){
+        visited.add(pos)
+        queue.push([rowMove, colMove, distance + 1])
+      }
+    }
+  }
+  return -1;
+};
+
+// Longest Path
+
+const longestPath = (graph) => {
+  // todo
+  let distance = {}
+  
+  for(let node in graph){
+    let curr = graph[node];
+    if(curr.length === 0){
+      distance[node] = 0;
+    }
+  }
+  
+  for(let node in graph){
+    traverseDistance(graph, node, distance);
+  }
+  return Math.max(...Object.values(distance))
+}
+
+  const traverseDistance = (graph, node, distance) => {
+    if(node in distance) return distance[node];
+    let maxLen = 0;
+    for(let neighbor of graph[node]){
+      const attempt = traverseDistance(graph, neighbor, distance);
+      if(attempt > maxLen) maxLen = attempt
+    }
+    distance[node] = 1 + maxLen;
+    return distance[node];
+  };
+
+  
